@@ -1,0 +1,45 @@
+class Solution {
+public:
+vector<vector<int>> findWinners(vector<vector<int>>& matches) {
+int n = matches.size();
+map<int, int> mp;
+map<int, int> part;
+
+        for(int i =0;i<n;i++)
+        {
+            mp[matches[i][1]]++;
+            if(part.find(matches[i][0])==part.end())
+            {
+                part[matches[i][0]] = 1;
+            }
+            if(part.find(matches[i][1])==part.end())
+            {
+                part[matches[i][1]] = 1;
+            }
+        }
+        // for(auto x: part)
+        // {
+        //     cout<<i<<endl;
+        // }
+
+        vector<vector<int>> ans(2);
+
+        for(auto x: part)
+        {
+            if(mp.find(x.first)==mp.end())
+            {
+                ans[0].push_back(x.first);
+            }
+        }
+
+        for(auto x: mp)
+        {
+            if(x.second==1)
+            {
+                ans[1].push_back(x.first);
+            }
+        }
+        return ans;
+    }
+
+};
