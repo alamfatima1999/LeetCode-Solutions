@@ -1,0 +1,67 @@
+class Solution
+{
+
+public:
+    string minWindow(string s, string t)
+    {
+        if (t.length() > s.length())
+        {
+            return "";
+        }
+        if (s == t)
+        {
+            return t;
+        }
+
+        int svec[256] = {0}; // array to hold string s chars frequency
+        int tvec[256] = {0}; // array to hold string t chars frequency
+
+        // Iterate on string t and fill tvec
+        for (char c : t)
+        {
+            tvec[c]++;
+        }
+
+        int left = 0;  // set left slider to position 0
+        int right = 0; // set right slider to position 0
+
+        int count = 0;
+        int minLength = INT_MAX;
+        int startIndx = -1;
+
+        // Lets iterate on string s
+        for (; right < s.length(); right++)
+        {
+            svec[s[right]]++;
+            // if this char is present in string t && make sure this char count in string s doesn't exceed string t (to avoid increment count for duplicates)
+            if (tvec[s[right]] != 0 && svec[s[right]] <= tvec[s[right]])
+            {
+                count++;
+            }
+
+            // check if count is equal to t's length (we found a substring in s which satisfies condition)
+            while (count == t.length())
+            {
+                if (minLength > (right - left + 1)) // if current min is greater then update it
+                {
+                    minLength = (right - left + 1);
+                    startIndx = left;
+                }
+
+                // Move left slider till count goes less than t.length()
+                if (svec[s[left]] != 0 && svec[s[left]] == tvec[s[left]])
+                {
+                    count--;
+                }
+                svec[s[left]]--;
+                left++;
+            }
+        }
+        if (startIndx == -1)
+        {
+            return "";
+        }
+
+        return s.substr(startIndx, minLength);
+    }
+};
