@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+class Solution {
+public:
+
+
+    bool isPerfectSquare(int num) {
+        int squareRoot = static_cast<int>(sqrt(num));
+        return squareRoot * squareRoot == num;
+    }
+
+    int numSquares(int n) {
+        vector<int> dp(n+1, INT_MAX);
+        dp[1] = 1;
+        if(n==1){
+            return 1;
+        }
+        for(int i =2;i<n+1;i++){
+            if(isPerfectSquare(i)){
+                dp[i] = 1;
+            }
+            else
+            {
+                // int mn = INT_MAX;
+                for(int j =i-1;j>=i/2;j--){
+                    dp[i] = min(dp[i], dp[j]+dp[i-j]);
+                }
+            }
+        }
+        return dp[n];
+    }
+};
